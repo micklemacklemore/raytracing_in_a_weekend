@@ -26,6 +26,14 @@ double hit_sphere(const point3& center, double radius, const ray& r) {
     }
 }
 
+color sky_blue(double t) {
+    return (1.0-t)*color(1.0, 1.0, 1.0) + t*color(0.5, 0.7, 1.0);  // lerp
+}
+
+inline color const black() {
+    return color(0.0, 0.0, 0.0);
+}
+
 color ray_color(const ray& r, const point3& spherePos) {
     auto t = hit_sphere(spherePos, 0.5, r);
     if (t > 0.0) {
@@ -34,7 +42,7 @@ color ray_color(const ray& r, const point3& spherePos) {
     }
     vec3 unit_direction = unit_vector(r.direction());
     t = 0.5*(unit_direction.y() + 1.0);
-    return (1.0-t)*color(0.0, 0.0, 0.0) + t*color(0.0, 0.0, 0.0);  // lerp
+    return sky_blue(t);
 }
 
 int main() {
