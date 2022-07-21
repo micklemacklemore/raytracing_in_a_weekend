@@ -20,6 +20,9 @@ class sphere : public hittable {
 bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const {
     // Consider the quadratic equation here (sort of.. consult Ray Tracing in a Weekend)
     // (-half_b + sqrt(half_b*half_b - a*c))/a
+
+    // what is ray? is that 0??
+
     vec3 oc = r.origin() - center;
     auto a = r.direction().length_squared();
     auto half_b = dot(oc, r.direction());
@@ -28,6 +31,8 @@ bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const
     auto discriminant = half_b*half_b - a*c;
     if (discriminant < 0) return false;
     auto sqrtd = sqrt(discriminant);
+    //std::cout << r.origin() << " | " << r.direction() << " | " << t_min << " | " << t_max << std::endl;
+    //std::cout << sqrtd << " " << a << " " << half_b << std::endl;
 
     // Find the nearest root that lies in the acceptable range.
     auto root = (-half_b - sqrtd) / a;
@@ -41,6 +46,7 @@ bool sphere::hit(const ray&r, double t_min, double t_max, hit_record& rec) const
     rec.t = root;
     rec.p = r.at(rec.t);
     vec3 outward_normal = (rec.p - center) / radius;
+    //std::cout << rec.t << " " << rec.p << " " << center << " " << radius << std::endl;
     rec.set_face_normal(r, outward_normal);
 
     return true;

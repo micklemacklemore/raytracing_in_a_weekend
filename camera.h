@@ -1,5 +1,6 @@
 #ifndef CAMERA_H
 #define CAMERA_H
+#define LOG(x, y) std::cout << x << " " << y << std::endl
 
 #include "rtweekend.h"
 
@@ -11,16 +12,20 @@ class camera {
         auto viewport_width = aspect_ratio * viewport_height;
         auto focal_length = 1.0;
 
-        auto origin = point3(0, 0, 0);
-        auto horizontal = vec3(viewport_width, 0, 0);
-        auto vertical = vec3(0, viewport_height, 0);
+        origin = point3(0, 0, 0);
+        horizontal = vec3(viewport_width, 0.0, 0.0);
+        vertical = vec3(0.0, viewport_height, 0.0);
         // 0, 0, 0 - 0, 0, 1 - width/2, 0, 0 - horizontal/2, 0, 0
-        auto lower_left_corner = origin - vec3(0, 0, focal_length) - vertical/2 - horizontal/2;
+        lower_left_corner = origin - vertical/2 - horizontal/2 - vec3(0, 0, focal_length);
     }
 
     ray get_ray(double u, double v) const {
-        return ray(origin, lower_left_corner + u*horizontal + v*vertical - origin);
+        ray thing(origin, lower_left_corner + u*horizontal + v*vertical - origin);
+        //std::cout << "ray " << thing.direction() << " | " << thing.origin() << std::endl;
+        return thing;
     }
+
+    vec3 getHorizontal() { return horizontal; }
 
     private:
     point3 origin;
